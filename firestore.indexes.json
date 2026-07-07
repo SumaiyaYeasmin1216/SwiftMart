@@ -1,0 +1,28 @@
+{
+  "indexes": [
+    {
+      "collectionId": "Products",
+      "fields": [
+        { "fieldPath": "Stock", "order": "ASCENDING" },
+        { "fieldPath": "Title", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionId": "Products",
+      "fields": [
+        { "fieldPath": "CategoryId", "order": "ASCENDING" },
+        { "fieldPath": "Stock", "order": "ASCENDING" },
+        { "fieldPath": "Title", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionId": "Orders",
+      "fields": [
+        { "fieldPath": "userId", "order": "ASCENDING" },
+        { "fieldPath": "orderDate", "order": "DESCENDING" },
+        { "fieldPath": "__name__", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

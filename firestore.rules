@@ -1,0 +1,93 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow read/write access for authenticated users to their own user document
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Allow admin users to read/write all user documents
+    match /users/{userId} {
+      allow read, write: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Media collection - allow authenticated users to read/write media
+    match /Media/{mediaId} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Customers collection - allow authenticated users to read/write customers
+    match /customers/{customerId} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Products collection - allow everyone to read products, authenticated users to write
+    match /products/{productId} {
+      allow read: if true; // Allow all users to read products for e-commerce
+      allow write: if request.auth != null;
+    }
+    
+    // Products collection (capitalized) - allow everyone to read products, authenticated users to write
+    match /Products/{productId} {
+      allow read: if true; // Allow all users to read products for e-commerce
+      allow write: if request.auth != null;
+    }
+    
+    // Categories collection - allow everyone to read categories, authenticated users to write
+    match /categories/{categoryId} {
+      allow read: if true; // Allow all users to read categories
+      allow write: if request.auth != null;
+    }
+    
+    // Categories collection (capitalized) - allow everyone to read categories, authenticated users to write
+    match /Categories/{categoryId} {
+      allow read: if true; // Allow all users to read categories
+      allow write: if request.auth != null;
+    }
+    
+    // Brands collection - allow everyone to read brands, authenticated users to write
+    match /brands/{brandId} {
+      allow read: if true; // Allow all users to read brands
+      allow write: if request.auth != null;
+    }
+    
+    // Brands collection (capitalized) - allow everyone to read brands, authenticated users to write
+    match /Brands/{brandId} {
+      allow read: if true; // Allow all users to read brands
+      allow write: if request.auth != null;
+    }
+    
+    // Orders collection - allow authenticated users to read/write orders
+    match /orders/{orderId} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Banners collection - allow authenticated users to read/write banners
+    match /banners/{bannerId} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // For development/admin panel - allow specific admin email full access
+    match /{document=**} {
+      allow read, write: if request.auth != null && 
+        request.auth.token.email == 'hemel2002@gmail.com';
+    }
+    
+    // Alternative: For development only - allow all authenticated users (NOT for production)
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // For testing - allow read access to Products for everyone
+    match /Products/{document=**} {
+      allow read: if true;
+    }
+    
+    // For testing - allow read access to products for everyone  
+    match /products/{document=**} {
+      allow read: if true;
+    }
+  }
+}
